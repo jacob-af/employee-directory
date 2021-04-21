@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import PersonTable from "./PersonTable.js";
 
 import Dropdown from "./Dropdown.js";
+import Pagination from "./Pagination.js";
 
 const PersonnelContainer = () => {
-  const [personnel, setPersonnel] = useState({});
+  const [personnel, setPersonnel] = useState([]);
   const [sort, setSort] = useState("none");
   const [filterCountry, setFilterCountry] = useState("none");
   const [filterAge, setFilterAge] = useState("none");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(10);
 
   const sortOptions = [
     "First Name (ASC)",
@@ -86,6 +89,31 @@ const PersonnelContainer = () => {
     }
   };
 
+  const formatPersonnel = () =>
+    personnel.filter(filterByCountry()).filter(filterByAge()).sort(sortArray());
+
+  const changePage = event => {
+    const btnName = event.target.getAttribute("data-value");
+    if (btnName === "next") {
+      if (currentPage < personnel.length / recordsPerPage) {
+        setCurrentPage(currentPage + 1);
+      }
+    } else {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    }
+  };
+
+  const changeNumberOfRecords = value => {
+    if (value === "none") {
+      setRecordsPerPage(10);
+    } else {
+      setRecordsPerPage(value);
+    }
+    setCurrentPage(1);
+  };
+
   return (
     <div className="container">
       <h1 className="text-center header">Employee Directory</h1>
@@ -109,9 +137,18 @@ const PersonnelContainer = () => {
           </Dropdown>
         </div>
       </div>
-      <PersonTable
-        bundle={{ filterByCountry, filterByAge, sortArray, personnel }}
+
+      <Pagination
+        bundle={{
+          changePage,
+          changeNumberOfRecords,
+          currentPage,
+          recordsPerPage,
+          formatPersonnel
+        }}
       />
+
+      <PersonTable bundle={{ currentPage, recordsPerPage, formatPersonnel }} />
     </div>
   );
 };

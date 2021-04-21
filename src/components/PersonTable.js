@@ -1,7 +1,7 @@
 import Person from "./Person.js";
 
 const PersonTable = ({
-  bundle: { filterByCountry, filterByAge, sortArray, personnel }
+  bundle: { formatPersonnel, currentPage, recordsPerPage }
 }) => {
   return (
     <div className="row">
@@ -17,11 +17,12 @@ const PersonTable = ({
           </tr>
         </thead>
         <tbody>
-          {personnel[0] ? (
-            personnel
-              .filter(filterByCountry())
-              .filter(filterByAge())
-              .sort(sortArray())
+          {formatPersonnel()[0] ? (
+            formatPersonnel()
+              .slice(
+                recordsPerPage * (currentPage - 1),
+                recordsPerPage * currentPage
+              )
               .map(person => <Person key={person.index} person={person} />)
           ) : (
             <tr>
