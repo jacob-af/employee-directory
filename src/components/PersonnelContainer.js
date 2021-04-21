@@ -1,21 +1,17 @@
 import API from "../utils/API";
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import Person from "./Person.js";
 import SortList from "./SortList.js";
-import FilterList from "./FilterList.js";
+import FilterListByCountry from "./FilterListByCountry.js";
+import FilterListByAge from "./FilterListByAge.js";
 
-class PersonnelContainer extends Component {
-  state = {
-    result: {},
-    display: {}
-  };
+const PersonnelContainer = () => {
+  const [personnel, setPersonnel] = useState({});
+  const [sort, setSort] = useState("none");
+  const [filterCountry, setFilterCountry] = useState("none");
+  const [filterAge, setFilterAge] = useState("none");
 
-  // When this component mounts, search for the movie "The Matrix"
-  componentDidMount() {
-    this.getPersonnel();
-  }
-
-  getPersonnel = () => {
+  useEffect(() => {
     API.search()
       .then(res => {
         console.log(res.data.results);
@@ -23,82 +19,98 @@ class PersonnelContainer extends Component {
           result.index = index;
           return result;
         });
-        this.setState({ result: results, display: results });
+        setPersonnel(results);
       })
       .catch(err => console.log(err));
-  };
+  }, []);
 
-  sortArray = value => {
-    let display;
-    switch (value) {
+  const sortArray = () => {
+    switch (sort) {
       case "first":
-        display = this.state.result.sort((a, b) =>
-          a.name.first > b.name.first ? 1 : -1
-        );
-        this.setState({ display });
-        break;
+        return (a, b) => (a.name.first > b.name.first ? 1 : -1);
+      case "first-d":
+        return (a, b) => (a.name.first < b.name.first ? 1 : -1);
       case "last":
-        display = this.state.result.sort((a, b) =>
-          a.name.last > b.name.last ? 1 : -1
-        );
-        this.setState({ display });
-        break;
+        return (a, b) => (a.name.last > b.name.last ? 1 : -1);
+      case "last-d":
+        return (a, b) => (a.name.last < b.name.last ? 1 : -1);
+      case "age":
+        return (a, b) => (a.dob.age > b.dob.age ? 1 : -1);
+      case "age-d":
+        return (a, b) => (a.dob.age < b.dob.age ? 1 : -1);
       case "none":
-        display = this.state.result.sort((a, b) =>
-          a.index > b.index ? 1 : -1
-        );
-        this.setState({ display });
-        break;
       default:
-        display = this.state.result;
-        this.setState({ display });
-        break;
+        return (a, b) => (a.index > b.index ? 1 : -1);
     }
   };
 
-  filterArray = value => {
-    let display;
-    switch (value) {
-      case "us":
-        display = this.state.result.filter(
-          result => result.location.country === "United States"
-        );
-        this.setState({ display });
-        break;
-      case "ne":
-        display = this.state.result.filter(
-          result => result.location.country === "Netherlands"
-        );
-        this.setState({ display });
-        break;
-      case "none":
-        display = this.state.result.sort((a, b) =>
-          a.index > b.index ? 1 : -1
-        );
-        this.setState({ display });
-        break;
-      default:
-        display = this.state.result;
-        this.setState({ display });
-        break;
+  const filterByCountry = () => {
+    if (filterCountry === "none") {
+      return person => person;
+    } else {
+      return person => person.location.country === filterCountry;
     }
   };
 
-  render() {
-    return (
-      <div>
-        <h1>here are some people</h1>
-        <SortList sort={this.sortArray} />
-        <FilterList filter={this.filterArray} />
-        <table>
+  const filterByAge = () => {
+    switch (filterAge) {
+      case "21-35":
+        return person => person.dob.age >= 21 && person.dob.age <= 35;
+      case "36-45":
+        return person => person.dob.age >= 36 && person.dob.age <= 45;
+      case "46-55":
+        return person => person.dob.age >= 46 && person.dob.age <= 55;
+      case "56-65":
+        return person => person.dob.age >= 56 && person.dob.age <= 65;
+      case "66+":
+        return person => person.dob.age >= 66;
+      case "none":
+      default:
+        return person => person;
+    }
+  };
+
+  return (
+    <div className="container">
+      <h1 className="text-center header">Employee Directory</h1>
+      <p className="text-center">
+        A randomly generated list of employees for you to sort and filter
+      </p>
+      <div className="row">
+        <div className="col-3">
+          <SortList sort={setSort} />
+        </div>
+        <div className="col-5">
+          <FilterListByCountry filter={setFilterCountry} />
+        </div>
+        <div className="col-4 dropdown">
+          <FilterListByAge filter={setFilterAge} />
+        </div>
+      </div>
+      <div className="row">
+        <table className="table table-bordered table-dark table-hover table-striped">
+          <thead>
+            <tr>
+              <td></td>
+              <td>First Name</td>
+              <td>Last Name</td>
+              <td>Age</td>
+              <td>City</td>
+              <td>Country</td>
+            </tr>
+          </thead>
           <tbody>
-            {this.state.result[0] ? (
-              this.state.display.map((person, index) => (
-                <Person key={index} person={person} />
-              ))
+            {personnel[0] ? (
+              personnel
+                .filter(filterByCountry())
+                .filter(filterByAge())
+                .sort(sortArray())
+                .map(person => <Person key={person.index} person={person} />)
             ) : (
               <tr>
                 <td>{"Loading"}</td>
+                <td>{"..."}</td>
+                <td>{"..."}</td>
                 <td>{"..."}</td>
                 <td>{"..."}</td>
                 <td>{"..."}</td>
@@ -107,8 +119,8 @@ class PersonnelContainer extends Component {
           </tbody>
         </table>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default PersonnelContainer;
