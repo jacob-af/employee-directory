@@ -8,8 +8,8 @@ import Pagination from "./Pagination.js";
 const PersonnelContainer = () => {
   const [personnel, setPersonnel] = useState([]);
   const [sort, setSort] = useState("none");
-  const [filterCountry, setFilterCountry] = useState("none");
-  const [filterAge, setFilterAge] = useState("none");
+  const [countryFilter, setCountryFilter] = useState("none");
+  const [ageFilter, setAgeFilter] = useState("none");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
 
@@ -63,16 +63,26 @@ const PersonnelContainer = () => {
     }
   };
 
+  const changeCountryFilter = value => {
+    setCountryFilter(value);
+    setCurrentPage(1);
+  };
+
+  const changeAgeFilter = value => {
+    setAgeFilter(value);
+    setCurrentPage(1);
+  };
+
   const filterByCountry = () => {
-    if (filterCountry === "none") {
+    if (countryFilter === "none") {
       return person => person;
     } else {
-      return person => person.location.country === filterCountry;
+      return person => person.location.country === countryFilter;
     }
   };
 
   const filterByAge = () => {
-    switch (filterAge) {
+    switch (ageFilter) {
       case "21-35":
         return person => person.dob.age >= 21 && person.dob.age <= 35;
       case "36-45":
@@ -127,13 +137,13 @@ const PersonnelContainer = () => {
           </Dropdown>
         </div>
         <div className="col-5">
-          <Dropdown callback={setFilterCountry} array={countries}>
-            {filterCountry === "none" ? "Filter by Country" : "(none)"}
+          <Dropdown callback={changeCountryFilter} array={countries}>
+            {countryFilter === "none" ? "Filter by Country" : "(none)"}
           </Dropdown>
         </div>
         <div className="col-4 dropdown">
-          <Dropdown callback={setFilterAge} array={ages}>
-            {filterAge === "none" ? "Filter by Age" : "(none)"}
+          <Dropdown callback={changeAgeFilter} array={ages}>
+            {ageFilter === "none" ? "Filter by Age" : "(none)"}
           </Dropdown>
         </div>
       </div>
