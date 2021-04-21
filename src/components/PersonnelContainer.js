@@ -1,15 +1,31 @@
 import API from "../utils/API";
 import { useState, useEffect } from "react";
 import Person from "./Person.js";
-import SortList from "./SortList.js";
-import FilterListByCountry from "./FilterListByCountry.js";
-import FilterListByAge from "./FilterListByAge.js";
+
+import Dropdown from "./Dropdown.js";
 
 const PersonnelContainer = () => {
   const [personnel, setPersonnel] = useState({});
   const [sort, setSort] = useState("none");
   const [filterCountry, setFilterCountry] = useState("none");
   const [filterAge, setFilterAge] = useState("none");
+
+  const sortOptions = [
+    "First Name (ASC)",
+    "First Name (DESC)",
+    "Last Name (ASC)",
+    "Last Name (DESC)",
+    "Age (ASC)",
+    "Age (DESC)"
+  ];
+  const countries = [
+    "United States",
+    "France",
+    "Germany",
+    "Denmark",
+    "United Kingdom"
+  ];
+  const ages = ["21-35", "36-45", "46-55", "56-65", "66+"];
 
   useEffect(() => {
     API.search()
@@ -26,17 +42,17 @@ const PersonnelContainer = () => {
 
   const sortArray = () => {
     switch (sort) {
-      case "first":
+      case "First Name (ASC)":
         return (a, b) => (a.name.first > b.name.first ? 1 : -1);
-      case "first-d":
+      case "First Name (DESC)":
         return (a, b) => (a.name.first < b.name.first ? 1 : -1);
-      case "last":
+      case "Last Name (ASC)":
         return (a, b) => (a.name.last > b.name.last ? 1 : -1);
-      case "last-d":
+      case "Last Name (DESC)":
         return (a, b) => (a.name.last < b.name.last ? 1 : -1);
-      case "age":
+      case "Age (ASC)":
         return (a, b) => (a.dob.age > b.dob.age ? 1 : -1);
-      case "age-d":
+      case "Age (DESC)":
         return (a, b) => (a.dob.age < b.dob.age ? 1 : -1);
       case "none":
       default:
@@ -78,13 +94,19 @@ const PersonnelContainer = () => {
       </p>
       <div className="row">
         <div className="col-3">
-          <SortList sort={setSort} />
+          <Dropdown callback={setSort} array={sortOptions}>
+            Sort by:
+          </Dropdown>
         </div>
         <div className="col-5">
-          <FilterListByCountry filter={setFilterCountry} />
+          <Dropdown callback={setFilterCountry} array={countries}>
+            Filter by Country
+          </Dropdown>
         </div>
         <div className="col-4 dropdown">
-          <FilterListByAge filter={setFilterAge} />
+          <Dropdown callback={setFilterAge} array={ages}>
+            Filter by Age
+          </Dropdown>
         </div>
       </div>
       <div className="row">
