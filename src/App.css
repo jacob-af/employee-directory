@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+.container {
+  font-family: "VT323";
+}
+
 .header {
   font-size: calc(20px + 4vmin);
 }
@@ -18,6 +24,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.card-btn {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .dropdown {
