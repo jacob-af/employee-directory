@@ -4,7 +4,7 @@
 
 ## About
 
-This React app displays, filters, and sorts fictional employee data.
+This React app displays, filters, and sorts fictional employee data. Deployed application can be found at [employee-tracker](https://www.jacobaf.com/employee-directory/)
 
 ## Table of Contents
 
