@@ -90,6 +90,7 @@ const PersonnelContainer = () => {
 
   const filterByName = () => {
     if (searchTerm !== "") {
+      //return either first or last names that include current search string
       return person =>
         person.name.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
         person.name.last.toLowerCase().includes(searchTerm.toLowerCase());
