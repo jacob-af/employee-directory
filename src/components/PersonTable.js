@@ -1,7 +1,7 @@
 import Person from "./Person.js";
 
 const PersonTable = ({
-  bundle: { formatPersonnel, currentPage, recordsPerPage }
+  bundle: { formatPersonnel, currentPage, recordsPerPage, searchTerm }
 }) => {
   return (
     <div className="row">
@@ -25,12 +25,22 @@ const PersonTable = ({
                 recordsPerPage * currentPage
               )
               .map(person => <Person key={person.index} person={person} />)
+          ) : searchTerm === "" ? (
+            <tr>
+              <td>{"..."}</td>
+              <td>{"Loading"}</td>
+              <td>{"..."}</td>
+              <td>{"Loading"}</td>
+              <td>{"..."}</td>
+              <td>{"Loading"}</td>
+              <td>{"..."}</td>
+            </tr>
           ) : (
             <tr>
               <td>{"*"}</td>
+              <td>{"No Matching Names"}</td>
               <td>{"*"}</td>
               <td>{"*"}</td>
-              <td>{"No Results Found"}</td>
               <td>{"*"}</td>
               <td>{"*"}</td>
               <td>{"*"}</td>

@@ -158,7 +158,9 @@ const PersonnelContainer = () => {
         }}
       />
 
-      <PersonTable bundle={{ currentPage, recordsPerPage, formatPersonnel }} />
+      <PersonTable
+        bundle={{ currentPage, recordsPerPage, formatPersonnel, searchTerm }}
+      />
     </div>
   );
 };
