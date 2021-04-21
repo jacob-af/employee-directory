@@ -15,7 +15,7 @@ const Pagination = ({
       <div className="col-2">
         <button
           style={{
-            opacity: currentPage > 1 ? 1 : 0.1
+            opacity: currentPage > 1 ? 1 : 0.4
           }}
           onClick={changePage}
           className="card-btn"
@@ -35,7 +35,7 @@ const Pagination = ({
       <div className="col-2">
         <button
           style={{
-            opacity: currentPage < personnel.length / recordsPerPage ? 1 : 0.1
+            opacity: currentPage < personnel.length / recordsPerPage ? 1 : 0.4
           }}
           onClick={changePage}
           className="card-btn"

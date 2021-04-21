@@ -17,7 +17,7 @@ This React app displays, filters, and sorts fictional employee data. Deployed ap
 
 ## Usage
 
-Employee Tracker will display a table of 500 randomly generated users from the [randomuser.me](https://randomuser.me/) API. Dropdown menus allow for sorting by first name, last name, age, and city. The employees can also be filter by country and age ranges. The user can change how many records are viewed at once and move through pages of results.
+Employee Tracker will display a table of 500 randomly generated users from the [randomuser.me](https://randomuser.me/) API. A search bar allows the user to enter the name of an employee, it will match against both first and last names. Dropdown menus allow for sorting by first name, last name, age, and city. The employees can also be filtered by country and set age ranges. The user can change how many records are viewed at once and move through pages of results.
 
 ![landing](./screenshots/landing.png)
 
