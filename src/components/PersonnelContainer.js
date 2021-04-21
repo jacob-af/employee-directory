@@ -123,17 +123,17 @@ const PersonnelContainer = () => {
       <div className="row">
         <div className="col-3">
           <Dropdown callback={setSort} array={sortOptions}>
-            Sort by:
+            {sort === "none" ? "Sort by:" : "(none)"}
           </Dropdown>
         </div>
         <div className="col-5">
           <Dropdown callback={setFilterCountry} array={countries}>
-            Filter by Country
+            {filterCountry === "none" ? "Filter by Country" : "(none)"}
           </Dropdown>
         </div>
         <div className="col-4 dropdown">
           <Dropdown callback={setFilterAge} array={ages}>
-            Filter by Age
+            {filterAge === "none" ? "Filter by Age" : "(none)"}
           </Dropdown>
         </div>
       </div>
