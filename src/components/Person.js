@@ -7,6 +7,7 @@ const Person = props => {
       <td>{props.person.dob.age}</td>
       <td>{props.person.location.city}</td>
       <td>{props.person.location.country}</td>
+      <td>{props.person.cell}</td>
     </tr>
   );
 };

@@ -14,6 +14,7 @@ const PersonTable = ({
             <td>Age</td>
             <td>City</td>
             <td>Country</td>
+            <td>Number</td>
           </tr>
         </thead>
         <tbody>
@@ -26,12 +27,13 @@ const PersonTable = ({
               .map(person => <Person key={person.index} person={person} />)
           ) : (
             <tr>
-              <td>{"Loading"}</td>
-              <td>{"..."}</td>
-              <td>{"..."}</td>
-              <td>{"..."}</td>
-              <td>{"..."}</td>
-              <td>{"..."}</td>
+              <td>{"*"}</td>
+              <td>{"*"}</td>
+              <td>{"*"}</td>
+              <td>{"No Results Found"}</td>
+              <td>{"*"}</td>
+              <td>{"*"}</td>
+              <td>{"*"}</td>
             </tr>
           )}
         </tbody>

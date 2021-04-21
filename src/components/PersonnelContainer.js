@@ -1,36 +1,19 @@
 import API from "../utils/API";
 import { useState, useEffect } from "react";
+import Header from "./Header.js";
 import PersonTable from "./PersonTable.js";
-
-import Dropdown from "./Dropdown.js";
 import Pagination from "./Pagination.js";
+import SearchForm from "./SearchForm.js";
+import SortAndFilter from "./SortAndFilter";
 
 const PersonnelContainer = () => {
   const [personnel, setPersonnel] = useState([]);
   const [sort, setSort] = useState("none");
+  const [searchTerm, setSearchTerm] = useState("");
   const [countryFilter, setCountryFilter] = useState("none");
   const [ageFilter, setAgeFilter] = useState("none");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(10);
-
-  const sortOptions = [
-    "First Name (ASC)",
-    "First Name (DESC)",
-    "Last Name (ASC)",
-    "Last Name (DESC)",
-    "Age (ASC)",
-    "Age (DESC)",
-    "City (ASC)",
-    "City (DESC)"
-  ];
-  const countries = [
-    "United States",
-    "France",
-    "Germany",
-    "Denmark",
-    "United Kingdom"
-  ];
-  const ages = ["21-35", "36-45", "46-55", "56-65", "66+"];
 
   useEffect(() => {
     API.search()
@@ -45,7 +28,7 @@ const PersonnelContainer = () => {
       .catch(err => console.log(err));
   }, []);
 
-  const sortArray = () => {
+  const sortPersonnel = () => {
     switch (sort) {
       case "First Name (ASC)":
         return (a, b) => (a.name.first > b.name.first ? 1 : -1);
@@ -105,8 +88,27 @@ const PersonnelContainer = () => {
     }
   };
 
+  const filterByName = () => {
+    if (searchTerm !== "") {
+      return person =>
+        person.name.first.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        person.name.last.toLowerCase().includes(searchTerm.toLowerCase());
+    } else {
+      return person => person;
+    }
+  };
+
+  const handleInputChange = event => {
+    setSearchTerm(event.target.value.trim());
+    setCurrentPage(1);
+  };
+
   const formatPersonnel = () =>
-    personnel.filter(filterByCountry()).filter(filterByAge()).sort(sortArray());
+    personnel
+      .filter(filterByName())
+      .filter(filterByCountry())
+      .filter(filterByAge())
+      .sort(sortPersonnel());
 
   const changePage = event => {
     const btnName = event.target.getAttribute("data-value");
@@ -132,27 +134,18 @@ const PersonnelContainer = () => {
 
   return (
     <div className="container">
-      <h1 className="text-center header">Employee Directory</h1>
-      <p className="text-center">
-        A randomly generated list of employees for you to sort and filter
-      </p>
-      <div className="row">
-        <div className="col-3">
-          <Dropdown callback={setSort} array={sortOptions}>
-            {sort === "none" ? "Sort by:" : "(none)"}
-          </Dropdown>
-        </div>
-        <div className="col-5">
-          <Dropdown callback={changeCountryFilter} array={countries}>
-            {countryFilter === "none" ? "Filter by Country" : "(none)"}
-          </Dropdown>
-        </div>
-        <div className="col-4 dropdown">
-          <Dropdown callback={changeAgeFilter} array={ages}>
-            {ageFilter === "none" ? "Filter by Age" : "(none)"}
-          </Dropdown>
-        </div>
-      </div>
+      <Header />
+      <SearchForm search={searchTerm} handleInputChange={handleInputChange} />
+      <SortAndFilter
+        bundle={{
+          sort,
+          countryFilter,
+          ageFilter,
+          setSort,
+          changeCountryFilter,
+          changeAgeFilter
+        }}
+      />
 
       <Pagination
         bundle={{
