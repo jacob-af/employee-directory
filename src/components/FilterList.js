@@ -1,9 +1,12 @@
-const FilterList = props => {
+const FilterList = ({ array, filter }) => {
   return (
-    <select onChange={e => props.filter(e.target.value)}>
-      <option value="none">Filter Employees</option>
-      <option value="us">USA</option>
-      <option value="ne">Netherlands</option>
+    <select onChange={e => filter(e.target.value)} className="dropdown">
+      <option value="none">Filter Employees by Country</option>
+      {array.map((item, index) => (
+        <option value={item} key={index}>
+          {item}
+        </option>
+      ))}
     </select>
   );
 };
