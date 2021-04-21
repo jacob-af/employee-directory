@@ -111,7 +111,7 @@ const PersonnelContainer = () => {
   const changePage = event => {
     const btnName = event.target.getAttribute("data-value");
     if (btnName === "next") {
-      if (currentPage < personnel.length / recordsPerPage) {
+      if (currentPage < formatPersonnel().length / recordsPerPage) {
         setCurrentPage(currentPage + 1);
       }
     } else {
