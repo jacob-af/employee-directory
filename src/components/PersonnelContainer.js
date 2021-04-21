@@ -19,7 +19,9 @@ const PersonnelContainer = () => {
     "Last Name (ASC)",
     "Last Name (DESC)",
     "Age (ASC)",
-    "Age (DESC)"
+    "Age (DESC)",
+    "City (ASC)",
+    "City (DESC)"
   ];
   const countries = [
     "United States",
@@ -57,6 +59,10 @@ const PersonnelContainer = () => {
         return (a, b) => (a.dob.age > b.dob.age ? 1 : -1);
       case "Age (DESC)":
         return (a, b) => (a.dob.age < b.dob.age ? 1 : -1);
+      case "City (ASC)":
+        return (a, b) => (a.location.city > b.location.city ? 1 : -1);
+      case "City (DESC)":
+        return (a, b) => (a.location.city < b.location.city ? 1 : -1);
       case "none":
       default:
         return (a, b) => (a.index > b.index ? 1 : -1);
